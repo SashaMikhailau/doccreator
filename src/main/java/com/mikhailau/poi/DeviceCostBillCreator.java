@@ -3,8 +3,8 @@ package com.mikhailau.poi;
 import java.util.Map;
 
 public class DeviceCostBillCreator extends FileCreator {
-	public static final String FILE_NAME = "рассчет_";
-	public static final String TEMPLATE_NAME = "рассчет_шаблон";
+	public static final String FILE_NAME = "output2";
+	public static final String TEMPLATE_NAME = "ud";
 
 
 	public DeviceCostBillCreator(Map<String, String> properties) {

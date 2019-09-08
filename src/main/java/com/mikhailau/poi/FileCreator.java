@@ -1,13 +1,12 @@
 package com.mikhailau.poi;
 
-import com.mikhailau.PropertiesConstants;
-import com.mikhailau.UiFieldsConstants;
+import com.mikhailau.constants.PropertiesConstants;
+import com.mikhailau.constants.UiFieldsConstants;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class FileCreator {
@@ -15,7 +14,7 @@ public abstract class FileCreator {
 
 	private WordReplacer wordReplacer = new WordReplacer();
 	private XWPFDocument document;
-	private Map<String, String> properties;
+	protected Map<String, String> properties;
 
 	public FileCreator(Map<String, String> properties) {
 		this.properties = properties;
@@ -31,13 +30,13 @@ public abstract class FileCreator {
 	public  String definePathToFile(){
 		String pathToFilders = properties.get(PropertiesConstants.PATH_TO_EXPERTISES_FOLDER);
 		String expertiseNumber= properties.get(UiFieldsConstants.EXPERTISE_NUMBER);
-		return String.format("%s\\%s%s%s", pathToFilders, getFileName(), expertiseNumber,
+		return String.format("%s%s%s%s", pathToFilders, getFileName(), expertiseNumber,
 				DOCX_EXTENSION);
 	}
 
 	public  String definePathToTemplate(){
 		String pathToTemplates = properties.get(PropertiesConstants.PATH_TO_TEMPLATES_FOLDER);
-		return String.format("%s\\%s%s", pathToTemplates, getTemplateName(),
+		return String.format("%s%s%s", pathToTemplates, getTemplateName(),
 				DOCX_EXTENSION);
 	}
 

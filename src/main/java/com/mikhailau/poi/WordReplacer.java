@@ -2,6 +2,7 @@ package com.mikhailau.poi;
 
 import org.apache.poi.xwpf.usermodel.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class WordReplacer {
 
-	public static final String REGEX = "%(\\w+)%";
+	public static final String REGEX = "\\[(\\w+)\\]";
 	public final Pattern pattern = Pattern.compile(REGEX);
 
 
@@ -32,8 +33,9 @@ public class WordReplacer {
 			List<XWPFRun> runs = p.getRuns();
 			if (runs != null) {
 				for (XWPFRun r : runs) {
-					String text = replaceValuesInRun(valuesToReplace, r.getText(0));
-					r.setText(text, 0);
+					Optional.ofNullable(r.getText(0))
+							.map(text -> replaceValuesInRun(valuesToReplace, text))
+							.ifPresent(text -> r.setText(text, 0));
 				}
 			}
 		}
@@ -57,7 +59,59 @@ public class WordReplacer {
 		return Optional.ofNullable(valuesToReplace.get(key))
 				.orElse("%KEY_NOT_FOUND%");
 	}
+
+	public static void replaceString(XWPFDocument doc, String search, String replace) throws Exception {
+		for (XWPFParagraph p : doc.getParagraphs()) {
+			TextSegment abc = p.searchText("abc", new PositionInParagraph());
+			List<XWPFRun> runs = p.getRuns();
+			List<Integer> group = new ArrayList<Integer>();
+			if (runs != null) {
+				String groupText = search;
+				for (int i = 0; i < runs.size(); i++) {
+					XWPFRun r = runs.get(i);
+					String text = r.getText(0);
+					if (text != null)
+						if (text.contains(search)) {
+							String safeToUseInReplaceAllString = Pattern.quote(search);
+							text = text.replaceAll(safeToUseInReplaceAllString, replace);
+							r.setText(text, 0);
+						} else if (groupText.startsWith(text)) {
+							group.add(i);
+							groupText = groupText.substring(text.length());
+							if (groupText.isEmpty()) {
+								runs.get(group.get(0)).setText(replace, 0);
+								for (int j = 1; j < group.size(); j++) {
+									p.removeRun(group.get(j));
+								}
+								group.clear();
+								groupText = search;
+							}
+						} else {
+							group.clear();
+							groupText = search;
+						}
+				}
+			}
+		}
+		for (XWPFTable tbl : doc.getTables()) {
+			for (XWPFTableRow row : tbl.getRows()) {
+				for (XWPFTableCell cell : row.getTableCells()) {
+					for (XWPFParagraph p : cell.getParagraphs()) {
+						for (XWPFRun r : p.getRuns()) {
+							String text = r.getText(0);
+							if (text.contains(search)) {
+								String safeToUseInReplaceAllString = Pattern.quote(search);
+								text = text.replaceAll(safeToUseInReplaceAllString, replace);
+								r.setText(text);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
+
 
 
 

@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 public class Launcher extends Application {
 
     public static final String TITLE = "DocsCreator";
-    public static final String FXML_LOCATION = "/sample.fxml";
-    public static final int WIDTH = 300;
-    public static final int HEIGHT = 275;
+    public static final String FXML_LOCATION = "/mainview.fxml";
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
 
     @Override
     public void start(Stage primaryStage) throws Exception{

@@ -1,20 +1,20 @@
 package com.mikhailau.service;
 
+import com.mikhailau.constants.UiFieldsConstants;
 import com.mikhailau.poi.DeviceCostBillCreator;
 import com.mikhailau.poi.ExpertiseCostBillCreator;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
-public class FileController {
-	private PropertiesHandler propertiesHandler = new PropertiesHandler();
+public class FileCreatorService {
 
-	public void createFiles(){
+
+	public void createFiles(Map<String,String> properties){
 		try {
-			Map<String, String> properties = propertiesHandler.readValuesFromSettings();
-//			new DeviceCostBillCreator(properties).createFile();
 			new ExpertiseCostBillCreator(properties).createFile();
-
+			//new DeviceCostBillCreator(properties).createFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
