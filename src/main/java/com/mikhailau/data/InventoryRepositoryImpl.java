@@ -16,7 +16,17 @@ public class InventoryRepositoryImpl implements InventoryRepository {
         Map<String, String> itemsMap = propertiesRepository.getAllFromPropertyFile(INVENTORY_LIST_PATH);
         return itemsMap.entrySet()
                 .stream()
-                .map(entry -> new InventoryItem(entry.getKey(), new BigDecimal(entry.getValue())))
+                .map(this::getInventoryItemFromMapEntry)
                 .collect(Collectors.toList());
+    }
+
+    private InventoryItem getInventoryItemFromMapEntry(Map.Entry<String, String> entry) {
+        String invNumber = entry.getKey().trim();
+        String[] splittedValue = entry.getValue().split("\\$");
+        if(splittedValue.length<2){
+            throw new IllegalArgumentException();
+        }
+
+        return new InventoryItem(invNumber, splittedValue[0], new BigDecimal(splittedValue[1]));
     }
 }

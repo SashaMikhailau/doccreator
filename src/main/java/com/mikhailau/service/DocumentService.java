@@ -1,5 +1,6 @@
 package com.mikhailau.service;
 
+import com.mikhailau.constants.UiFieldsConstants;
 import com.mikhailau.data.InventoryRepository;
 import com.mikhailau.data.InventoryRepositoryImpl;
 import com.mikhailau.data.PropertiesRepository;
@@ -32,9 +33,12 @@ public class DocumentService {
 
 
     public void pushData(UiResultModel dataFromUI){
+        CalculatorService calculatorService = new CalculatorService(dataFromUI,getSettings());
         Map<String, String> copyOfSettings = getSettings();
         copyOfSettings.putAll(dataFromUI.getPrimaryFieldValues());
+        copyOfSettings.putAll(calculatorService.calculateCosts());
         fileCreatorService.createFiles(copyOfSettings);
+
     }
 
 

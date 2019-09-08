@@ -1,6 +1,7 @@
 package com.mikhailau.poi;
 
 import com.mikhailau.constants.UiFieldsConstants;
+import com.mikhailau.constants.UiFieldsConstants.InvestigationType;
 
 import java.util.Map;
 import java.util.Optional;
@@ -13,10 +14,9 @@ public class ExpertiseCostBillCreator extends FileCreator {
 
 	@Override
 	public String getTemplateName() {
-		UiFieldsConstants.InvestigationType investigationType = Optional.ofNullable(properties.get(UiFieldsConstants.MATERIAL_TYPE))
-				.map(UiFieldsConstants.InvestigationType::valueOf)
-				.orElse(UiFieldsConstants.InvestigationType.MAT_ADMINISTRATIVE);
-		return investigationType == UiFieldsConstants.InvestigationType.MAT_ADMINISTRATIVE?
+		InvestigationType investigationType =
+				InvestigationType.getByName(properties.get(UiFieldsConstants.MATERIAL_TYPE));
+		return investigationType == InvestigationType.MAT_ADMINISTRATIVE?
 			TEMPLATE_NAME_MATERIAL:
 				TEMPLATE_NAME_UD;
 	}

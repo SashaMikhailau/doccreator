@@ -1,6 +1,7 @@
 package com.mikhailau.constants;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class UiFieldsConstants {
 	public static final String EXPERTISE_NUMBER = "NUMBER";
@@ -40,6 +41,12 @@ public class UiFieldsConstants {
 		public String getRussianTranscr() {
 			return russianTranscr;
 		}
+
+		public static InvestigationType getByName(String name){
+			return Optional.ofNullable(name)
+					.map(UiFieldsConstants.InvestigationType::valueOf)
+					.orElse(UiFieldsConstants.InvestigationType.MAT_ADMINISTRATIVE);
+		}
 	}
 
 	public enum ExpertiseType{
@@ -60,6 +67,7 @@ public class UiFieldsConstants {
 			return russianTranscr;
 		}
 	}
+
 
 
 
