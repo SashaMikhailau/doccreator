@@ -1,7 +1,12 @@
 package com.mikhailau.poi;
 
+import com.mikhailau.model.InventoryItem;
+import com.mikhailau.util.TextUtils;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlException;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +31,53 @@ public class WordReplacer {
 		}
 		return document;
 	}
+
+	public XWPFDocument addInventoryItemsToFirstTable(XWPFDocument document,
+													  List<InventoryItem> inventoryItems) {
+		Optional.ofNullable(document.getTables().get(0))
+				.filter(table->!table.getRows().isEmpty())
+				.ifPresent(table -> fillTableWithInventoryItems(table,inventoryItems));
+		return document;
+	}
+
+	private void fillTableWithInventoryItems(XWPFTable table,List<InventoryItem> inventoryItems) {
+
+		CTRow rowStyle = getCTFFromTableRow(table);
+		for (int i = 0; i < inventoryItems.size(); i++) {
+			XWPFTableRow newRow = new XWPFTableRow( rowStyle,table);
+			InventoryItem currentItem = inventoryItems.get(i);
+			setStringToCell(newRow.getCell(0), String.valueOf(i + 1));
+			setStringToCell(newRow.getCell(1), currentItem.getName());
+			setStringToCell(newRow.getCell(2), currentItem.getInvNumber());
+			setStringToCell(newRow.getCell(3), TextUtils.formatBigDecimal(currentItem.getAmortizationCost()));
+			table.addRow(newRow);
+		}
+	}
+
+	private void setStringToCell(XWPFTableCell cell1, String text) {
+		Optional.ofNullable(cell1)
+				.map(cell -> cell.getParagraphs())
+				.filter(paragraphs -> !paragraphs.isEmpty())
+				.map(paragraphs -> paragraphs.get(0))
+				.map(para -> para.getRuns())
+				.filter(runs -> !runs.isEmpty())
+				.map(runs -> runs.get(0))
+				.ifPresent(run -> {
+					run.setText(text,0);
+				});
+	}
+
+	private CTRow getCTFFromTableRow(XWPFTable table) {
+		XWPFTableRow templateRow = table.getRow(0);
+		CTRow rowStyle = null;
+		try {
+			rowStyle = CTRow.Factory.parse(templateRow.getCtRow().newInputStream());
+		} catch (XmlException | IOException e) {
+			e.printStackTrace();
+		}
+		return rowStyle;
+	}
+
 
 	private void replaceTextInParagraphs(List<XWPFParagraph> paragraphs,
 										 Map<String, String> valuesToReplace) {

@@ -37,7 +37,7 @@ public class DocumentService {
         Map<String, String> copyOfSettings = getSettings();
         copyOfSettings.putAll(dataFromUI.getPrimaryFieldValues());
         copyOfSettings.putAll(calculatorService.calculateCosts());
-        fileCreatorService.createFiles(copyOfSettings);
+        fileCreatorService.createFiles(copyOfSettings,dataFromUI.getInventoryItems());
 
     }
 

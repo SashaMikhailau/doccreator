@@ -2,13 +2,20 @@ package com.mikhailau.poi;
 
 import com.mikhailau.constants.UiFieldsConstants;
 import com.mikhailau.constants.UiFieldsConstants.InvestigationType;
+import org.apache.poi.ooxml.POIXMLDocument;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.util.Map;
 import java.util.Optional;
 
 public class ExpertiseCostBillCreator extends FileCreator {
 
-	public static final String FILE_NAME = "spravka";
+	@Override
+	public POIXMLDocument transformDocument() {
+		return wordReplacer.replaceWords((XWPFDocument) document, properties);
+	}
+
+	public static final String FILE_NAME = "spravka_";
 	public static final String TEMPLATE_NAME_MATERIAL = "material";
 	public static final String TEMPLATE_NAME_UD = "ud";
 

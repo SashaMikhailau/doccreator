@@ -131,14 +131,44 @@ public class MainViewController {
 
     @FXML
     private void handleCreateButtonClick(ActionEvent event) {
+        String validationMessage = validateUiData();
+        if(validationMessage!=null){
+            showAlertDialog(validationMessage);
+           return;
+        }
+        File dirToSave = getFolderTOSaveFromDirChooser();
+        if (dirToSave != null && primaryStage != null) {
+            handleFormDataAndCloseDialog(dirToSave);
+        }
+    }
+
+    private void showAlertDialog(String validationMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ВНИМАНИЕ");
+        alert.setHeaderText("Введены неверные данные");
+        alert.setContentText(validationMessage);
+        alert.showAndWait();
+    }
+
+    private String validateUiData() {
+        StringBuilder sb = new StringBuilder();
+        String errorMesage = "Некорректный номер экспертизы";
+        String result = Optional.ofNullable(expNumber.getText())
+                .filter(text -> text.matches("\\d+"))
+                .map(text -> "")
+                .orElse(errorMesage);
+        sb.append(result);
+
+        return sb.toString().isEmpty() ? null : sb.toString();
+
+    }
+
+    private File getFolderTOSaveFromDirChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File pathToExpFolder =
                 new File(documentService.getSettings().get(PropertiesConstants.PATH_TO_EXPERTISES_FOLDER));
         directoryChooser.setInitialDirectory(pathToExpFolder);
-        File dirToSave = directoryChooser.showDialog(getPrimaryStage());
-        if (dirToSave != null && primaryStage != null) {
-            handleFormDataAndCloseDialog(dirToSave);
-        }
+        return directoryChooser.showDialog(getPrimaryStage());
     }
 
     private void handleFormDataAndCloseDialog(File dirToSave) {

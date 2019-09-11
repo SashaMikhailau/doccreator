@@ -4,9 +4,9 @@ import com.mikhailau.constants.PropertiesConstants;
 import com.mikhailau.constants.UiFieldsConstants;
 import com.mikhailau.model.InventoryItem;
 import com.mikhailau.model.UiResultModel;
+import com.mikhailau.util.TextUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +14,6 @@ import static com.mikhailau.constants.CalculatedConstansts.*;
 import static com.mikhailau.constants.UiFieldsConstants.*;
 
 public class CalculatorService {
-    private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
     private final UiResultModel uiResultModel;
     private final Map<String, String> settings;
     private final Integer time;
@@ -27,7 +26,7 @@ public class CalculatorService {
         time =
                 Integer.parseInt(uiResultModel.getPrimaryFieldValues().get(TOTAL_HOURS_COUNT));
         InvestigationType investigationType =
-                InvestigationType.getByName(settings.get(UiFieldsConstants.MATERIAL_TYPE));
+                InvestigationType.getByName(uiResultModel.getPrimaryFieldValues().get(UiFieldsConstants.MATERIAL_TYPE));
         needTocountTimeCost = investigationType == InvestigationType.MAT_ADMINISTRATIVE;
     }
 
@@ -44,7 +43,7 @@ public class CalculatorService {
 
     private Map<String, String> calculateTotal() {
         Map<String,String> results = new HashMap<>();
-        results.put(TOTAL, formatBigDecimal(total));
+        results.put(TOTAL, TextUtils.formatBigDecimal(total));
         return results;
     }
 
@@ -55,8 +54,8 @@ public class CalculatorService {
         BigDecimal invTotal = invCost.multiply(BigDecimal.valueOf(time));
         total = total.add(invTotal);
         Map<String,String> results = new HashMap<>();
-        results.put(INV_TOTAL, formatBigDecimal(invTotal));
-        results.put(INV_COST, formatBigDecimal(invCost));
+        results.put(INV_TOTAL, TextUtils.formatBigDecimal(invTotal));
+        results.put(INV_COST, TextUtils.formatBigDecimal(invCost));
         return results;
     }
 
@@ -68,7 +67,7 @@ public class CalculatorService {
                 .reduce(new BigDecimal(0), BigDecimal::add);
         total = total.add(miscTotal);
         Map<String,String> results = new HashMap<>();
-        results.put(MISC_COST, formatBigDecimal(miscTotal));
+        results.put(MISC_COST, TextUtils.formatBigDecimal(miscTotal));
         return results;
     }
 
@@ -77,7 +76,7 @@ public class CalculatorService {
         BigDecimal timeCost = hourCost.multiply(new BigDecimal(time));
         total = total.add(timeCost);
         Map<String,String> results = new HashMap<>();
-        results.put(TIME_COST, formatBigDecimal(timeCost));
+        results.put(TIME_COST, TextUtils.formatBigDecimal(timeCost));
         return results;
     }
 
@@ -91,8 +90,4 @@ public class CalculatorService {
     }
 
 
-    private String formatBigDecimal(BigDecimal invTotal) {
-        return invTotal.compareTo(BigDecimal.ZERO)==0?"0":
-        decimalFormat.format(invTotal.doubleValue());
-    }
 }

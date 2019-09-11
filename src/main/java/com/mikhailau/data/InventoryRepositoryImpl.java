@@ -27,6 +27,6 @@ public class InventoryRepositoryImpl implements InventoryRepository {
             throw new IllegalArgumentException();
         }
 
-        return new InventoryItem(invNumber, splittedValue[0], new BigDecimal(splittedValue[1]));
+        return new InventoryItem(splittedValue[0], invNumber, new BigDecimal(splittedValue[1]));
     }
 }
