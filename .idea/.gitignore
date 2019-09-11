@@ -3,6 +3,6 @@
 /workspace.xml
 log/
 target/
-.idea/
+
 *.iml
 *.iws
