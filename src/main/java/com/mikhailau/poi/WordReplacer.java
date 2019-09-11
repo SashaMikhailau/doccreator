@@ -67,6 +67,29 @@ public class WordReplacer {
 				});
 	}
 
+	private void setStringToCell2(XWPFTableCell cell1, String text) {
+		final XWPFParagraph paragraph = cell1.getParagraphs().get(0);;
+		XWPFRun xwpfRun = cell1.getParagraphs()
+				.stream()
+				.flatMap(para -> para.getRuns().stream())
+				.findFirst().orElse(null);
+		Optional.ofNullable(xwpfRun)
+				.ifPresent(run->{
+					run.setText(text, 0);
+					for(int i =0;i<paragraph.getRuns().size();i++){
+						paragraph.removeRun(i);
+					}
+					paragraph.addRun(run);
+					for(int i =0;i<cell1.getParagraphs().size();i++){
+						cell1.removeParagraph(i);
+					}
+					cell1.addParagraph(paragraph);
+				});
+
+
+
+	}
+
 	private CTRow getCTFFromTableRow(XWPFTable table) {
 		XWPFTableRow templateRow = table.getRow(0);
 		CTRow rowStyle = null;

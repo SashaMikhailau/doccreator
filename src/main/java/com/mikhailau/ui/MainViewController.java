@@ -152,15 +152,20 @@ public class MainViewController {
 
     private String validateUiData() {
         StringBuilder sb = new StringBuilder();
-        String errorMesage = "Некорректный номер экспертизы";
-        String result = Optional.ofNullable(expNumber.getText())
-                .filter(text -> text.matches("\\d+"))
-                .map(text -> "")
-                .orElse(errorMesage);
-        sb.append(result);
-
+        sb.append(getValidationMessage("Некорректный номер экспертизы\n", expNumber));;
+        sb.append(getValidationMessage("Некорреткное количество часов\n", hoursCount));;
+        if(finish_date.getValue()==null){
+            sb.append("Неверный формат даты\n");
+        }
         return sb.toString().isEmpty() ? null : sb.toString();
 
+    }
+
+    private String getValidationMessage(String errorMesage, TextField expNumber) {
+        return Optional.ofNullable(expNumber.getText())
+                    .filter(text -> text.matches("\\d+"))
+                    .map(text -> "")
+                    .orElse(errorMesage);
     }
 
     private File getFolderTOSaveFromDirChooser() {
