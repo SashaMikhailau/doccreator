@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mikhailau.constants.PropertiesConstants.PATH_TO_CONFIG;
+
 public class DocumentService {
-    public static final String SETTINGS_PATH = "src/main/resources/nastroiki.properties";
+    public static final String SETTINGS_PATH = PATH_TO_CONFIG+"nastroiki" +
+        ".properties";
     private final Map<String, String> settings;
     private PropertiesRepository propertiesRepository = new PropertiesRepository();
     private InventoryRepository inventoryRepository = new InventoryRepositoryImpl();

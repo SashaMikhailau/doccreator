@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.mikhailau.constants.PropertiesConstants.PATH_TO_CONFIG;
+
 public class InventoryRepositoryImpl implements InventoryRepository {
-    public static final String INVENTORY_LIST_PATH = "src/main/resources/oborudovanie.properties";
+    public static final String INVENTORY_LIST_PATH = PATH_TO_CONFIG +"oborudovanie.properties";
     private PropertiesRepository propertiesRepository = new PropertiesRepository();
 
     @Override

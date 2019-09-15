@@ -13,7 +13,8 @@ public class PropertiesConstants {
 	public static final String EXPERT_FIO = "EXPERT_FIO";
 	public static final String EXPERT_POSITION = "EXPERT_POSITION";
 	public static final String PATH_TO_EXPERTISES_FOLDER = "PATH_TO_EXPERTISES_FOLDER";
-	public static final String PATH_TO_TEMPLATES_FOLDER = "path_to_templates_folder";
+
+	public static final String PATH_TO_CONFIG = "config/";
 
 
 
