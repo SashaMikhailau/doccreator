@@ -11,8 +11,7 @@ public class UiFieldsConstants {
 	public static final String TOTAL_HOURS_COUNT= "TIME";
 	public static final String MATERIAL_TYPE= "MATERIAL_TYPE";
 	public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-	public static final String EXP_TYPE_PREFIX = "судебной экспертизы материалов, веществ и " +
-			"изделий - ";
+	public static final String EXP_TYPE_PREFIX = "судебной экспертизы ";
 
 	public enum ExaminationType{
 		HMS_COST("ХМС"),
@@ -50,7 +49,8 @@ public class UiFieldsConstants {
 	}
 
 	public enum ExpertiseType{
-		DRUGS("наркотических средств и психотропных веществ"),
+		DRUGS("наркотических средств и психотропных веществ, их аналогов и прекурсоров, " +
+				"сильнодействующих веществ"),
 		SSG("спиртосодержащих жидкостей");
 		private String russianTranscr;
 
